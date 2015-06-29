@@ -1,18 +1,22 @@
 package com.clementl.habitude;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,23 +48,47 @@ public class GetData {
         return result.toString();
     }
 
-    public static boolean POST(String value) {
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(/*Some server to receive*/);
+    //Basic post request using name value pairs
+//    public static boolean POST(String value) {
+//        HttpClient httpclient = new DefaultHttpClient();
+//        //TODO: sepcify server for post requests
+//        HttpPost httppost = new HttpPost(/*Some server to receive*/);
+//
+//        // create a list to store HTTP variables and their values
+//        List pairs = new ArrayList<NameValuePair>();
+//        //TODO: set name value pair for habitude post requests
+//        pairs.add(new BasicNameValuePair("myHttpData", value));
+//        try {
+//            httppost.setEntity(new UrlEncodedFormEntity(pairs));
+//            // execute post request
+//            HttpResponse response = httpclient.execute(httppost);
+//            return true;
+//        } catch (ClientProtocolException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+
+    //takes a JSON string and posts to server url
+    public static void POST(String value) {
+
+        //setup http connection
+        DefaultHttpClient client = new DefaultHttpClient();
+        //TODO: set server url
+        HttpPost post = new HttpPost(/* server url */);
+
         try {
-            // create a list to store HTTP variables and their values
-            List nameValuePairs = new ArrayList();
-            // add an HTTP variable and value pair
-            nameValuePairs.add(new BasicNameValuePair("myHttpData", value));
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            // send the variable and value, in other words post, to the URL
-            HttpResponse response = httpclient.execute(httppost);
-            return true;
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            JSONObject json = new JSONObject(value);
+            StringEntity se = new StringEntity(json.toString());
+            post.setEntity(se);
+            client.execute(post);
+
+            //TODO: get server response
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+
     }
 }
