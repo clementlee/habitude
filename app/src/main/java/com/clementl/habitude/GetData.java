@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -72,7 +73,7 @@ public class GetData {
 
 
     public static String POST(String value) {
-        final String server = "https://dev.clementl.com/getuser";
+        final String server = "http://dev.clementl.com/getuser";
 
         //setup http connection
         DefaultHttpClient client = new DefaultHttpClient();
@@ -85,11 +86,10 @@ public class GetData {
             post.setEntity(se);
             HttpResponse response = client.execute(post);
 
-            return response.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "POST: 404";
+        return "";
     }
 
 }

@@ -55,11 +55,12 @@ public class HttpExampleActivity extends ActionBarActivity implements View.OnCli
         switch (v.getId()) {
             case R.id.getBtn:
                 new GetAsyncTask().execute(etValue.getText().toString());
-                //call AsyncTask to perform network operation on separate thread
+                etValue.setText("");
                 break;
 
             case R.id.postBtn:
                 new PostAsyncTask().execute(etValue.getText().toString());
+                etValue.setText("");
                 break;
         }
     }
