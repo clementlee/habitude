@@ -20,7 +20,7 @@ public class HttpExampleActivity extends ActionBarActivity implements View.OnCli
     TextView tvResponse;
     TextView tvIsConnected;
     EditText etValue;
-    Button btn;
+    Button getBtn, postBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +31,10 @@ public class HttpExampleActivity extends ActionBarActivity implements View.OnCli
         tvResponse = (TextView) findViewById(R.id.tvResponse);
         tvIsConnected = (TextView) findViewById(R.id.tvIsConnected);
         etValue = (EditText) findViewById(R.id.etValue);
-        btn = (Button) findViewById(R.id.button1);
-        btn.setOnClickListener(this);
+        getBtn = (Button) findViewById(R.id.getBtn);
+        getBtn.setOnClickListener(this);
+        postBtn = (Button) findViewById(R.id.postBtn);
+        postBtn.setOnClickListener(this);
 
         //check connection
         if(isConnected()) {
@@ -46,11 +48,20 @@ public class HttpExampleActivity extends ActionBarActivity implements View.OnCli
     }
 
     public void onClick(View v) {
-        if(etValue.getText().toString().length() < 1)
-            Toast.makeText(this, "Not a URL", Toast.LENGTH_LONG).show();
-        else
-            new HttpAsyncTask().execute(etValue.getText().toString());
-        //call AsyncTask to perform network operation on separate thread
+        if(etValue.getText().toString().length() < 1) {
+            Toast.makeText(this, "Enter something", Toast.LENGTH_LONG).show();
+            return;
+        }
+        switch (v.getId()) {
+            case R.id.getBtn:
+                new GetAsyncTask().execute(etValue.getText().toString());
+                //call AsyncTask to perform network operation on separate thread
+                break;
+
+            case R.id.postBtn:
+                new PostAsyncTask().execute(etValue.getText().toString());
+                break;
+        }
     }
 
     public boolean isConnected(){
@@ -62,7 +73,8 @@ public class HttpExampleActivity extends ActionBarActivity implements View.OnCli
             return false;
     }
 
-    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
+    //Async task for get
+    private class GetAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
             return GetData.GET(urls[0]);
@@ -72,6 +84,21 @@ public class HttpExampleActivity extends ActionBarActivity implements View.OnCli
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
+            tvResponse.setText(result);
+        }
+    }
+
+    //Async task for post
+    private class PostAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            return GetData.POST(urls[0]);
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            Toast.makeText(getBaseContext(), "Sent!", Toast.LENGTH_LONG).show();
             tvResponse.setText(result);
         }
     }

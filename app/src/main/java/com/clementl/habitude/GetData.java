@@ -25,7 +25,7 @@ public class GetData {
     //get a string representation of the data from the url param
     public static String GET(String url) {
         InputStream is = null;
-        String result = "404";
+        String result = "GET: 404";
         try {
             HttpClient httpclient = new DefaultHttpClient();
             HttpResponse httpresponse = httpclient.execute(new HttpGet(url));
@@ -48,47 +48,48 @@ public class GetData {
         return result.toString();
     }
 
-    //Basic post request using name value pairs
-//    public static boolean POST(String value) {
+//    //Basic post request using name value pairs
+//    public static String POST(String value) {
+//        final String server = "http://dev.clementl.com/getuser";
 //        HttpClient httpclient = new DefaultHttpClient();
-//        //TODO: sepcify server for post requests
-//        HttpPost httppost = new HttpPost(/*Some server to receive*/);
+//        HttpPost httppost = new HttpPost(server);
 //
 //        // create a list to store HTTP variables and their values
 //        List pairs = new ArrayList<NameValuePair>();
 //        //TODO: set name value pair for habitude post requests
-//        pairs.add(new BasicNameValuePair("myHttpData", value));
+//        pairs.add(new BasicNameValuePair("email", value));
+//
 //        try {
 //            httppost.setEntity(new UrlEncodedFormEntity(pairs));
 //            // execute post request
 //            HttpResponse response = httpclient.execute(httppost);
-//            return true;
-//        } catch (ClientProtocolException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
+//            return response.toString();
+//        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-//        return false;
+//        return "404";
 //    }
 
-    //takes a JSON string and posts to server url
-    public static void POST(String value) {
+
+    public static String POST(String value) {
+        final String server = "https://dev.clementl.com/getuser";
 
         //setup http connection
         DefaultHttpClient client = new DefaultHttpClient();
-        //TODO: set server url
-        HttpPost post = new HttpPost(/* server url */);
+        HttpPost post = new HttpPost(server);
 
         try {
-            JSONObject json = new JSONObject(value);
+            JSONObject json = new JSONObject();
+            json.put("email", value);
             StringEntity se = new StringEntity(json.toString());
             post.setEntity(se);
-            client.execute(post);
+            HttpResponse response = client.execute(post);
 
-            //TODO: get server response
+            return response.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        return "POST: 404";
     }
+
 }
