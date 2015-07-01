@@ -73,7 +73,8 @@ public class GetData {
 
 
     public static String POST(String value) {
-        final String server = "http://dev.clementl.com/getuser";
+        final String server = "http://dev.clementl.com:8080/getuser";
+        String result = "POST: 404";
 
         //setup http connection
         DefaultHttpClient client = new DefaultHttpClient();
@@ -83,13 +84,21 @@ public class GetData {
             JSONObject json = new JSONObject();
             json.put("email", value);
             StringEntity se = new StringEntity(json.toString());
+
             post.setEntity(se);
+            post.setHeader("Accept", "application/json");
+            post.setHeader("Content-type", "application/json");
+
             HttpResponse response = client.execute(post);
+
+            InputStream is = response.getEntity().getContent();
+            if(is != null)
+                result = convertToString(is);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return result;
     }
 
 }

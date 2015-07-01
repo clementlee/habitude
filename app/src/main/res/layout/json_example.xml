@@ -64,7 +64,7 @@
         android:layout_width="346dp"
         android:layout_height="198dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="\nGET: type a url (http://...) that returns JSON. The server&apos;s response will display above.
+        android:text="\nGET: type a url (eg. http://ip-api.com/json) that returns JSON. The server&apos;s response will display above.
             \n \nPOST: the string in the text box will be posted to dev.clementl.com/getuser with field 'email' and the string as the value. The server's response will display above."
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
